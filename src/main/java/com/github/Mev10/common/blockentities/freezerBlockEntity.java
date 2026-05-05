@@ -32,7 +32,7 @@ public class freezerBlockEntity extends ApplianceBlockEntity<freezerBlockEntity.
     private boolean prevRefrigerationState = false; // 记录前一次制冷状态
 
     public freezerBlockEntity(BlockPos pos, BlockState state) {
-        super(TfcfreezerBlocksEntities.freezer_BLOCK.get(), pos, state, freezerInventory::new, NAME,true,100);
+        super(TfcfreezerBlocksEntities.freezer_BLOCK.get(), pos, state, freezerInventory::new, NAME,true,40);
 
         // 初始设置提取规则
         updateExtractionRules();
@@ -137,7 +137,7 @@ public class freezerBlockEntity extends ApplianceBlockEntity<freezerBlockEntity.
     }
 
     public static class freezerInventory extends InventoryItemHandler implements DelegateEnergyStorage, INBTSerializable<CompoundTag> {
-        private static final int CAPACITY = 1000000;
+        private static final int CAPACITY = 100000;
         private static final int MAX_TRANSFER = 800;
 
         private final freezerBlockEntity freezer;
@@ -154,8 +154,8 @@ public class freezerBlockEntity extends ApplianceBlockEntity<freezerBlockEntity.
         @Override
         public void setStackInSlot(int slot, ItemStack stack)
         {
-            if(freezer.canRefrigerate() && !FoodCapability.hasTrait(stack, TfcfreezerFoodTraits.REFRIGERATING)){
-                super.setStackInSlot(slot, FoodCapability.applyTrait(stack.copy(), TfcfreezerFoodTraits.REFRIGERATING));
+            if(freezer.canRefrigerate() && !FoodCapability.hasTrait(stack, TfcfreezerFoodTraits.freezing)){
+                super.setStackInSlot(slot, FoodCapability.applyTrait(stack.copy(), TfcfreezerFoodTraits.freezing));
             }else{
                 super.setStackInSlot(slot, stack.copy());
             }
@@ -163,8 +163,8 @@ public class freezerBlockEntity extends ApplianceBlockEntity<freezerBlockEntity.
 
         @Override
         public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-            if(freezer.canRefrigerate() && !FoodCapability.hasTrait(stack, TfcfreezerFoodTraits.REFRIGERATING)){
-                return super.insertItem(slot, FoodCapability.applyTrait(stack.copy(), TfcfreezerFoodTraits.REFRIGERATING), simulate);
+            if(freezer.canRefrigerate() && !FoodCapability.hasTrait(stack, TfcfreezerFoodTraits.freezing)){
+                return super.insertItem(slot, FoodCapability.applyTrait(stack.copy(), TfcfreezerFoodTraits.freezing), simulate);
             }else{
                 return  super.insertItem(slot, stack.copy(), simulate);
             }
@@ -179,20 +179,20 @@ public class freezerBlockEntity extends ApplianceBlockEntity<freezerBlockEntity.
             }
 
             // 非制冷状态正常取出
-            return FoodCapability.removeTrait(super.extractItem(slot, amount, simulate).copy(), TfcfreezerFoodTraits.REFRIGERATING);
+            return FoodCapability.removeTrait(super.extractItem(slot, amount, simulate).copy(), TfcfreezerFoodTraits.freezing);
         }
 
         public void applyfreezerTraitToInventory(){
             for (int i = 0; i < SLOTS; i++)
             {
-                super.setStackInSlot(i, FoodCapability.applyTrait(super.getStackInSlot(i).copy(), TfcfreezerFoodTraits.REFRIGERATING));
+                super.setStackInSlot(i, FoodCapability.applyTrait(super.getStackInSlot(i).copy(), TfcfreezerFoodTraits.freezing));
             }
         }
 
         public void removefreezerTraitFromInventory(){
             for (int i = 0; i < SLOTS; i++)
             {
-                super.setStackInSlot(i, FoodCapability.removeTrait(super.getStackInSlot(i).copy(), TfcfreezerFoodTraits.REFRIGERATING));
+                super.setStackInSlot(i, FoodCapability.removeTrait(super.getStackInSlot(i).copy(), TfcfreezerFoodTraits.freezing));
             }
         }
 

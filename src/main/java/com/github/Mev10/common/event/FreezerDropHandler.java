@@ -56,8 +56,8 @@ public class FreezerDropHandler {
             boolean changed = false;
             for (int i = 0; i < PortableFreezerContainer.SLOTS; i++) {
                 ItemStack food = handler.getStackInSlot(i);
-                if (!food.isEmpty() && FoodCapability.hasTrait(food, TfcfreezerFoodTraits.REFRIGERATING)) {
-                    ItemStack cleaned = FoodCapability.removeTrait(food.copy(), TfcfreezerFoodTraits.REFRIGERATING);
+                if (!food.isEmpty() && FoodCapability.hasTrait(food, TfcfreezerFoodTraits.freezing)) {
+                    ItemStack cleaned = FoodCapability.removeTrait(food.copy(), TfcfreezerFoodTraits.freezing);
                     handler.setStackInSlot(i, cleaned);
                     changed = true;
                 }

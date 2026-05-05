@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 public class TfcfreezerFoodTraits {
     public enum Default
     {
-        REFRIGERATING(0.07f);
+        freezing(0.0625f);
 
         private final float mod;
         private final String name;
@@ -43,7 +43,7 @@ public class TfcfreezerFoodTraits {
             return mod;
         }
     }
-    public static final FoodTrait REFRIGERATING = register(Default.REFRIGERATING);
+    public static final FoodTrait freezing = register(Default.freezing);
 
     private static FoodTrait register(Default trait)
     {

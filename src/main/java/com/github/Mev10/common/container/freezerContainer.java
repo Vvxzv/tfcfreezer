@@ -37,7 +37,7 @@ public class freezerContainer extends BlockEntityContainer<freezerBlockEntity> i
         
         if (index < 27) {
             // move from block entity inventory
-            FoodCapability.removeTrait(fromStack, TfcfreezerFoodTraits.REFRIGERATING);
+            FoodCapability.removeTrait(fromStack, TfcfreezerFoodTraits.freezing);
             if (!moveItemStackTo(fromStack, 27, 62, false))
                 return ItemStack.EMPTY;
         } else if (index < 63) {

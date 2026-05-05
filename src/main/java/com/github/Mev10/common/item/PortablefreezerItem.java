@@ -29,11 +29,21 @@ public class PortablefreezerItem extends Item {
 
     // 全局常量：所有电量参数在此定义，其他类引用此处
     public static final int CAPACITY = 4000000;
-    public static final int MAX_TRANSFER = 2000;
+    public static final int MAX_TRANSFER = 20000;
     public static final int ENERGY_PER_TICK = 40;   // 每 tick 消耗，实际每秒消耗 = ENERGY_PER_TICK * 20
 
     public PortablefreezerItem(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+        return slotChanged || oldStack.getItem() != newStack.getItem();
+    }
+
+    @Override
+    public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack) {
+        return oldStack.getItem() != newStack.getItem();
     }
 
     @Override

@@ -68,8 +68,8 @@ public class PortableFreezerTickHandler {
         boolean changed = false;
         for (int slot = 0; slot < handler.getSlots(); slot++) {
             ItemStack food = handler.getStackInSlot(slot);
-            if (!food.isEmpty() && FoodCapability.hasTrait(food, TfcfreezerFoodTraits.REFRIGERATING)) {
-                handler.setStackInSlot(slot, FoodCapability.removeTrait(food.copy(), TfcfreezerFoodTraits.REFRIGERATING));
+            if (!food.isEmpty() && FoodCapability.hasTrait(food, TfcfreezerFoodTraits.freezing)) {
+                handler.setStackInSlot(slot, FoodCapability.removeTrait(food.copy(), TfcfreezerFoodTraits.freezing));
                 changed = true;
             }
         }
@@ -84,8 +84,8 @@ public class PortableFreezerTickHandler {
         boolean changed = false;
         for (int slot = 0; slot < handler.getSlots(); slot++) {
             ItemStack food = handler.getStackInSlot(slot);
-            if (!food.isEmpty() && !FoodCapability.hasTrait(food, TfcfreezerFoodTraits.REFRIGERATING)) {
-                handler.setStackInSlot(slot, FoodCapability.applyTrait(food.copy(), TfcfreezerFoodTraits.REFRIGERATING));
+            if (!food.isEmpty() && !FoodCapability.hasTrait(food, TfcfreezerFoodTraits.freezing)) {
+                handler.setStackInSlot(slot, FoodCapability.applyTrait(food.copy(), TfcfreezerFoodTraits.freezing));
                 changed = true;
             }
         }
@@ -99,8 +99,8 @@ public class PortableFreezerTickHandler {
         boolean changed = false;
         for (int slot = 0; slot < handler.getSlots(); slot++) {
             ItemStack food = handler.getStackInSlot(slot);
-            if (!food.isEmpty() && FoodCapability.hasTrait(food, TfcfreezerFoodTraits.REFRIGERATING)) {
-                handler.setStackInSlot(slot, FoodCapability.removeTrait(food.copy(), TfcfreezerFoodTraits.REFRIGERATING));
+            if (!food.isEmpty() && FoodCapability.hasTrait(food, TfcfreezerFoodTraits.freezing)) {
+                handler.setStackInSlot(slot, FoodCapability.removeTrait(food.copy(), TfcfreezerFoodTraits.freezing));
                 changed = true;
             }
         }

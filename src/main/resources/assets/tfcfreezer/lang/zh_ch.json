@@ -1,0 +1,7 @@
+{
+  "item.tfcfreezer.appliances.portable_freezer": "便携冰柜",
+  "block.tfcfreezer.freezer": "冰柜",
+  "itemGroup.tfcfreezer.creative_tab": "群峦-冰柜",
+  "tooltip.tfcfreezer.food_trait.freezing": "冰冻的",
+  "tooltip.tfcfreezer.toggle": "开关"
+}

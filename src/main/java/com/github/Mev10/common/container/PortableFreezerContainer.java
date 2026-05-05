@@ -78,7 +78,7 @@ public class PortableFreezerContainer extends AbstractContainerMenu {
                 if (!isItemValid(slot, stack)) return stack;
                 ItemStack result = super.insertItem(slot, stack, simulate);
                 if (!simulate && canRefrigerate()) {
-                    FoodCapability.applyTrait(result, TfcfreezerFoodTraits.REFRIGERATING);
+                    FoodCapability.applyTrait(result, TfcfreezerFoodTraits.freezing);
                 }
                 return result;
             }
@@ -89,7 +89,7 @@ public class PortableFreezerContainer extends AbstractContainerMenu {
                 if (canRefrigerate()) return ItemStack.EMPTY;
                 ItemStack extracted = super.extractItem(slot, amount, simulate);
                 if (!simulate && !extracted.isEmpty()) {
-                    FoodCapability.removeTrait(extracted, TfcfreezerFoodTraits.REFRIGERATING);
+                    FoodCapability.removeTrait(extracted, TfcfreezerFoodTraits.freezing);
                 }
                 return extracted;
             }
@@ -155,7 +155,7 @@ public class PortableFreezerContainer extends AbstractContainerMenu {
             for (int i = 0; i < SLOTS; i++) {
                 ItemStack stack = itemHandler.getStackInSlot(i);
                 if (!stack.isEmpty()) {
-                    ItemStack cleaned = FoodCapability.removeTrait(stack.copy(), TfcfreezerFoodTraits.REFRIGERATING);
+                    ItemStack cleaned = FoodCapability.removeTrait(stack.copy(), TfcfreezerFoodTraits.freezing);
                     itemHandler.setStackInSlot(i, cleaned);
                 }
             }
@@ -167,20 +167,13 @@ public class PortableFreezerContainer extends AbstractContainerMenu {
             updateRefrigerationState();
             saveToNBT();
         }
-
-        syncToClient();
-
-        // 移除以下两行：不再手动调用 processFreezerTick，避免状态被重置和额外扣电
-        // if (!player.level().isClientSide) {
-        //     PortableFreezerTickHandler.processFreezerTick(freezerStack, player);
-        // }
     }
 
     private void applyFreezerTraitToAllSlots() {
         for (int i = 0; i < SLOTS; i++) {
             ItemStack stack = itemHandler.getStackInSlot(i);
-            if (!stack.isEmpty() && !FoodCapability.hasTrait(stack, TfcfreezerFoodTraits.REFRIGERATING)) {
-                itemHandler.setStackInSlot(i, FoodCapability.applyTrait(stack.copy(), TfcfreezerFoodTraits.REFRIGERATING));
+            if (!stack.isEmpty() && !FoodCapability.hasTrait(stack, TfcfreezerFoodTraits.freezing)) {
+                itemHandler.setStackInSlot(i, FoodCapability.applyTrait(stack.copy(), TfcfreezerFoodTraits.freezing));
             }
         }
     }
@@ -189,7 +182,7 @@ public class PortableFreezerContainer extends AbstractContainerMenu {
         for (int i = 0; i < SLOTS; i++) {
             ItemStack stack = itemHandler.getStackInSlot(i);
             if (!stack.isEmpty()) {
-                itemHandler.setStackInSlot(i, FoodCapability.removeTrait(stack.copy(), TfcfreezerFoodTraits.REFRIGERATING));
+                itemHandler.setStackInSlot(i, FoodCapability.removeTrait(stack.copy(), TfcfreezerFoodTraits.freezing));
             }
         }
     }
