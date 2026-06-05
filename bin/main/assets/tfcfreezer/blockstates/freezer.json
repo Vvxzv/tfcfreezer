@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=east,open=false": {
+      "model": "tfcfreezer:block/freezer_body",
+      "y": 90
+    },
+    "facing=east,open=true": {
+      "model": "tfcfreezer:block/freezer_body",
+      "y": 90
+    },
+    "facing=north,open=false": {
+      "model": "tfcfreezer:block/freezer_body"
+    },
+    "facing=north,open=true": {
+      "model": "tfcfreezer:block/freezer_body"
+    },
+    "facing=south,open=false": {
+      "model": "tfcfreezer:block/freezer_body",
+      "y": 180
+    },
+    "facing=south,open=true": {
+      "model": "tfcfreezer:block/freezer_body",
+      "y": 180
+    },
+    "facing=west,open=false": {
+      "model": "tfcfreezer:block/freezer_body",
+      "y": 270
+    },
+    "facing=west,open=true": {
+      "model": "tfcfreezer:block/freezer_body",
+      "y": 270
+    }
+  }
+}

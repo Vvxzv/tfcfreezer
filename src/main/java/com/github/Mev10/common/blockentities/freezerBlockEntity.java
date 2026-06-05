@@ -7,7 +7,6 @@ import com.github.Mev10.common.capabilities.EnergyStorageCallback;
 import com.github.Mev10.common.capabilities.InventoryConsumerEnergyStorage;
 import com.github.Mev10.common.container.freezerContainer;
 import com.github.Mev10.common.item.TfcfreezerFoodTraits;
-import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.blockentities.InventoryBlockEntity;
 import net.dries007.tfc.common.capabilities.InventoryItemHandler;
 import net.dries007.tfc.common.capabilities.PartialItemHandler;
@@ -17,6 +16,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -37,6 +38,7 @@ public class freezerBlockEntity extends ApplianceBlockEntity<freezerBlockEntity.
     private boolean prevRefrigerationState = false; // 记录前一次制冷状态
 
     private int openContainerCount;
+    private boolean closeSoundPending;
     private float openness;
     private float oOpenness;
 
@@ -94,9 +96,18 @@ public class freezerBlockEntity extends ApplianceBlockEntity<freezerBlockEntity.
     public static void clientTick(Level level, BlockPos pos, BlockState state, freezerBlockEntity freezer) {
         freezer.oOpenness = freezer.openness;
         if (state.hasProperty(freezerBlock.OPEN) && state.getValue(freezerBlock.OPEN)) {
+            freezer.closeSoundPending = false;
             freezer.openness = Math.min(1.0F, freezer.openness + 0.1F);
         } else {
+            if (freezer.openness > 0.0F) {
+                freezer.closeSoundPending = true;
+            }
             freezer.openness = Math.max(0.0F, freezer.openness - 0.1F);
+            if (freezer.closeSoundPending && freezer.openness == 0.0F && freezer.oOpenness > 0.0F) {
+                freezer.closeSoundPending = false;
+                level.playLocalSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D,
+                        SoundEvents.IRON_DOOR_CLOSE, SoundSource.BLOCKS, 1.0F, 1.0F, false);
+            }
         }
     }
 
@@ -133,7 +144,9 @@ public class freezerBlockEntity extends ApplianceBlockEntity<freezerBlockEntity.
         BlockState state = getBlockState();
         if (state.hasProperty(freezerBlock.OPEN) && state.getValue(freezerBlock.OPEN) != open) {
             level.setBlock(worldPosition, state.setValue(freezerBlock.OPEN, open), Block.UPDATE_CLIENTS);
-            Helpers.playSound(level, worldPosition, open ? TFCSounds.OPEN_BARREL.get() : TFCSounds.CLOSE_BARREL.get());
+            if (open) {
+                Helpers.playSound(level, worldPosition, SoundEvents.IRON_DOOR_OPEN);
+            }
         }
     }
 

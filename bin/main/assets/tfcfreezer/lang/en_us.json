@@ -1,0 +1,7 @@
+{
+  "item.tfcfreezer.appliances.portable_freezer": "Portable freezer",
+  "block.tfcfreezer.freezer": "freezer",
+  "itemGroup.tfcfreezer.creative_tab": "Tfc Freezer",
+  "tooltip.tfcfreezer.food_trait.freezing": "freezing",
+  "tooltip.tfcfreezer.toggle": "Turn on/off"
+}
