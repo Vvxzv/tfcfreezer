@@ -22,7 +22,7 @@ import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 public class PortableFreezerContainer extends AbstractContainerMenu {
-    public static final int SLOTS = 27;
+    public static final int SLOTS = 18;
     public static final int CAPACITY = PortablefreezerItem.CAPACITY;
     public static final int ENERGY_PER_TICK = PortablefreezerItem.ENERGY_PER_TICK;
 
@@ -98,7 +98,7 @@ public class PortableFreezerContainer extends AbstractContainerMenu {
         CompoundTag invTag = tag.getCompound("Inventory");
         if (!invTag.isEmpty()) itemHandler.deserializeNBT(invTag);
 
-        for (int row = 0; row < 3; row++)
+        for (int row = 0; row < 2; row++)
             for (int col = 0; col < 9; col++)
                 addSlot(new SlotItemHandler(itemHandler, col + row * 9, 8 + col * 18, 18 + row * 18) {
                     @Override
@@ -109,9 +109,9 @@ public class PortableFreezerContainer extends AbstractContainerMenu {
 
         for (int row = 0; row < 3; row++)
             for (int col = 0; col < 9; col++)
-                addSlot(new Slot(playerInv, col + row * 9 + 9, 8 + col * 18, 84 + row * 18));
+                addSlot(new Slot(playerInv, col + row * 9 + 9, 8 + col * 18, 66 + row * 18));
         for (int col = 0; col < 9; col++)
-            addSlot(new Slot(playerInv, col, 8 + col * 18, 142));
+            addSlot(new Slot(playerInv, col, 8 + col * 18, 124));
 
         updateRefrigerationState();
         if (!player.level().isClientSide) syncToClient();

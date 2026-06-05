@@ -12,12 +12,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class PortableFreezerScreen extends AbstractContainerScreen<PortableFreezerContainer> {
-    public static final ResourceLocation BACKGROUND = TfcfreezerHelpers.identifier("textures/gui/freezer.png");
+    public static final ResourceLocation BACKGROUND = TfcfreezerHelpers.identifier("textures/gui/portable_freezer.png");
+    private static final int ENERGY_COLOR = 0xFF7DEBFF;
 
     public PortableFreezerScreen(PortableFreezerContainer menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
         this.imageWidth = 176 + 20;
-        this.imageHeight = 166;
+        this.imageHeight = 148;
+        this.inventoryLabelY = 54;
     }
 
     @Override
@@ -33,7 +35,7 @@ public class PortableFreezerScreen extends AbstractContainerScreen<PortableFreez
 
         int energyHeight = menu.getEnergyStoredScaled(64);
         graphics.fill(leftPos + 177, topPos + 40 + (64 - energyHeight),
-                leftPos + 185, topPos + 104, 0xFFFF4757);
+                leftPos + 185, topPos + 104, ENERGY_COLOR);
     }
 
     @Override

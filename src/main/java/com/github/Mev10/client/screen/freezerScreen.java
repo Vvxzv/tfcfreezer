@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Inventory;
 public class freezerScreen extends BlockEntityScreen<freezerBlockEntity, freezerContainer> {
 
     public static final ResourceLocation BACKGROUND = TfcfreezerHelpers.identifier("textures/gui/freezer.png");
+    private static final int ENERGY_COLOR = 0xFF7DEBFF;
     private static final Component TOGGLE = Component.translatable(String.format("tooltip.%s.toggle", Tfcfreezer.MOD_ID));
 
     public freezerScreen(freezerContainer container, Inventory playerInventory, Component name) {
@@ -41,6 +42,6 @@ public class freezerScreen extends BlockEntityScreen<freezerBlockEntity, freezer
                 this.topPos + 40+(64-energyScaled),
                 this.leftPos + 185,
                 this.topPos + 104,
-                0xFFFF4757);
+                ENERGY_COLOR);
     }
 }

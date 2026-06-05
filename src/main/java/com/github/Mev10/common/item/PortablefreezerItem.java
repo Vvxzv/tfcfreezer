@@ -80,7 +80,7 @@ public class PortablefreezerItem extends Item {
 
     @Override
     public int getBarColor(ItemStack stack) {
-        return 0xFF4757; // 红色能量条
+        return 0x7DEBFF;
     }
 
     @Override
