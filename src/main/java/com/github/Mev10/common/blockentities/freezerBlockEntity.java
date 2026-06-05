@@ -17,6 +17,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -36,6 +37,8 @@ public class freezerBlockEntity extends ApplianceBlockEntity<freezerBlockEntity.
     private boolean prevRefrigerationState = false; // 记录前一次制冷状态
 
     private int openContainerCount;
+    private float openness;
+    private float oOpenness;
 
     public freezerBlockEntity(BlockPos pos, BlockState state) {
         super(TfcfreezerBlocksEntities.freezer_BLOCK.get(), pos, state, freezerInventory::new, NAME,true,40);
@@ -86,6 +89,19 @@ public class freezerBlockEntity extends ApplianceBlockEntity<freezerBlockEntity.
 
             freezer.markForSync();
         }
+    }
+
+    public static void clientTick(Level level, BlockPos pos, BlockState state, freezerBlockEntity freezer) {
+        freezer.oOpenness = freezer.openness;
+        if (state.hasProperty(freezerBlock.OPEN) && state.getValue(freezerBlock.OPEN)) {
+            freezer.openness = Math.min(1.0F, freezer.openness + 0.1F);
+        } else {
+            freezer.openness = Math.max(0.0F, freezer.openness - 0.1F);
+        }
+    }
+
+    public float getOpenness(float partialTick) {
+        return Mth.lerp(partialTick, oOpenness, openness);
     }
 
     @Nullable

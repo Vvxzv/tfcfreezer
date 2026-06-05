@@ -27,6 +27,7 @@ public class TfcfreezerBlocks {
                     .noOcclusion()
                     .blockEntity(TfcfreezerBlocksEntities.freezer_BLOCK)
                     .serverTicks(freezerBlockEntity::serverTick)
+                    .clientTicks(freezerBlockEntity::clientTick)
             ));
 
     private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier) {
@@ -37,5 +38,4 @@ public class TfcfreezerBlocks {
         return RegistrationHelpers.registerBlock(BLOCKS, TfcfreezerItems.ITEMS, name, blockSupplier, blockItemFactory);
     }
 }
-
 
