@@ -16,14 +16,19 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
 public class freezerBlock extends DeviceBlock  implements FourWayFacingDeviceBlock {
+    public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
 
     public freezerBlock(ExtendedProperties properties) {
         super(properties, InventoryRemoveBehavior.DROP);
-        registerDefaultState(getStateDefinition().any());
+        registerDefaultState(getStateDefinition().any()
+                .setValue(FACING, net.minecraft.core.Direction.NORTH)
+                .setValue(OPEN, false));
     }
 
     @Override
@@ -38,12 +43,14 @@ public class freezerBlock extends DeviceBlock  implements FourWayFacingDeviceBlo
     }
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
+        builder.add(FACING, OPEN);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
-        return this.defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite());
+        return this.defaultBlockState()
+                .setValue(FACING, ctx.getHorizontalDirection().getOpposite())
+                .setValue(OPEN, false);
     }
 
     @Override

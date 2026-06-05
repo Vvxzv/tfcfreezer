@@ -60,6 +60,12 @@ public class freezerContainer extends BlockEntityContainer<freezerBlockEntity> i
         blockEntity.toggleAppliance();
     }
 
+    @Override
+    public void removed(Player player) {
+        super.removed(player);
+        blockEntity.stopOpen(player);
+    }
+
     public int getEnergyStoredScaled() {
         return (int) (((float)  blockEntity.getEnergy() / (float) blockEntity.getMaxEnergy()) * 64);
     }

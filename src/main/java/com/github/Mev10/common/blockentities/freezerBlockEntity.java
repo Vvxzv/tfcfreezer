@@ -1,15 +1,18 @@
 package com.github.Mev10.common.blockentities;
 
 import com.github.Mev10.Tfcfreezer;
+import com.github.Mev10.common.block.freezerBlock;
 import com.github.Mev10.common.capabilities.DelegateEnergyStorage;
 import com.github.Mev10.common.capabilities.EnergyStorageCallback;
 import com.github.Mev10.common.capabilities.InventoryConsumerEnergyStorage;
 import com.github.Mev10.common.container.freezerContainer;
 import com.github.Mev10.common.item.TfcfreezerFoodTraits;
+import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.blockentities.InventoryBlockEntity;
 import net.dries007.tfc.common.capabilities.InventoryItemHandler;
 import net.dries007.tfc.common.capabilities.PartialItemHandler;
 import net.dries007.tfc.common.capabilities.food.FoodCapability;
+import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -19,6 +22,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -30,6 +34,8 @@ public class freezerBlockEntity extends ApplianceBlockEntity<freezerBlockEntity.
     private static final Component NAME = Component.translatable(String.format("block.%s.freezer", Tfcfreezer.MOD_ID));
 
     private boolean prevRefrigerationState = false; // 记录前一次制冷状态
+
+    private int openContainerCount;
 
     public freezerBlockEntity(BlockPos pos, BlockState state) {
         super(TfcfreezerBlocksEntities.freezer_BLOCK.get(), pos, state, freezerInventory::new, NAME,true,40);
@@ -85,7 +91,34 @@ public class freezerBlockEntity extends ApplianceBlockEntity<freezerBlockEntity.
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int windowID, Inventory inv, Player player) {
+        startOpen(player);
         return freezerContainer.create(this, inv, windowID);
+    }
+
+    public void startOpen(Player player) {
+        if (level == null || level.isClientSide || player.isSpectator()) {
+            return;
+        }
+        openContainerCount++;
+        setOpenState(true);
+    }
+
+    public void stopOpen(Player player) {
+        if (level == null || level.isClientSide || player.isSpectator()) {
+            return;
+        }
+        openContainerCount = Math.max(0, openContainerCount - 1);
+        if (openContainerCount == 0) {
+            setOpenState(false);
+        }
+    }
+
+    private void setOpenState(boolean open) {
+        BlockState state = getBlockState();
+        if (state.hasProperty(freezerBlock.OPEN) && state.getValue(freezerBlock.OPEN) != open) {
+            level.setBlock(worldPosition, state.setValue(freezerBlock.OPEN, open), Block.UPDATE_CLIENTS);
+            Helpers.playSound(level, worldPosition, open ? TFCSounds.OPEN_BARREL.get() : TFCSounds.CLOSE_BARREL.get());
+        }
     }
 
     public boolean canRefrigerate()
