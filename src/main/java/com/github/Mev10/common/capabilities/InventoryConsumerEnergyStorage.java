@@ -10,10 +10,10 @@ public class InventoryConsumerEnergyStorage extends EnergyStorage {
     }
 
     @Override
-    public int extractEnergy(int amount, boolean b) {
-        int consumed = super.extractEnergy(amount, b);
-        if(consumed > 0){
-            energyLevelChanged();
+    public int extractEnergy(int amount, boolean simulate) {
+        int consumed = super.extractEnergy(amount, simulate);
+        if(consumed > 0 && !simulate){
+            callback.energyLevelChanged();
         }
         return consumed;
     }
@@ -21,13 +21,9 @@ public class InventoryConsumerEnergyStorage extends EnergyStorage {
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
         int received = super.receiveEnergy(maxReceive, simulate);
-        if(received > 0){
-            energyLevelChanged();
+        if(received > 0 && !simulate){
+            callback.energyLevelChanged();
         }
         return received;
-    }
-
-    public void energyLevelChanged(){
-
     }
 }

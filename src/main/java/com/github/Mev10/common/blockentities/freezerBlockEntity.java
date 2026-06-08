@@ -43,7 +43,7 @@ public class freezerBlockEntity extends ApplianceBlockEntity<freezerBlockEntity.
     private float oOpenness;
 
     public freezerBlockEntity(BlockPos pos, BlockState state) {
-        super(TfcfreezerBlocksEntities.freezer_BLOCK.get(), pos, state, freezerInventory::new, NAME,true,40);
+        super(TfcfreezerBlocksEntities.freezer_BLOCK.get(), pos, state, freezerInventory::new, NAME,false,40);
 
         // 初始设置提取规则
         updateExtractionRules();
@@ -66,7 +66,7 @@ public class freezerBlockEntity extends ApplianceBlockEntity<freezerBlockEntity.
         freezer.checkForLastTickSync();
         if (level.getGameTime() % 2 == 0)
         {
-            boolean currentState = freezer.canRefrigerate();
+            boolean previousState = freezer.canRefrigerate();
 
             if(freezer.canRefrigerate()){
                 freezer.consumeEnergyForTicks(2);
@@ -83,8 +83,9 @@ public class freezerBlockEntity extends ApplianceBlockEntity<freezerBlockEntity.
                 }
             }
 
+            boolean currentState = freezer.canRefrigerate();
             // 检查状态是否变化，如果变化则更新提取规则
-            if (freezer.prevRefrigerationState != currentState) {
+            if (freezer.prevRefrigerationState != currentState || previousState != currentState) {
                 freezer.updateExtractionRules();
                 freezer.prevRefrigerationState = currentState;
             }
@@ -174,19 +175,30 @@ public class freezerBlockEntity extends ApplianceBlockEntity<freezerBlockEntity.
     @Override
     public void energyLevelChanged()
     {
+        markForSync();
     }
 
     @Override
     protected void turnOff() {
         super.turnOff();
         removefreezerTraitFromInventory();
+        updateExtractionRules();
+        prevRefrigerationState = false;
     }
 
     @Override
     protected void turnOn() {
         super.turnOn();
-        if(canRefrigerate()){
+        if(inventory.energyStorage.getEnergyStored() >= energyTickConsumption){
+            setActivity(true);
             applyfreezerTraitToInventory();
+            updateExtractionRules();
+            prevRefrigerationState = true;
+        } else {
+            setActivity(false);
+            removefreezerTraitFromInventory();
+            updateExtractionRules();
+            prevRefrigerationState = false;
         }
     }
 

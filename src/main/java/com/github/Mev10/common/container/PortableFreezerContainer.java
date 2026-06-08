@@ -167,6 +167,8 @@ public class PortableFreezerContainer extends AbstractContainerMenu {
             updateRefrigerationState();
             saveToNBT();
         }
+        persistToActualStack();
+        syncToClient();
     }
 
     private void applyFreezerTraitToAllSlots() {
@@ -198,6 +200,14 @@ public class PortableFreezerContainer extends AbstractContainerMenu {
         if (!player.level().isClientSide && player instanceof ServerPlayer sp) {
             TfcfreezerPacketHandler.send(PacketDistributor.PLAYER.with(() -> sp),
                     new SyncPortableFreezerPacket(freezerStack));
+        }
+    }
+
+    private void persistToActualStack() {
+        if (player.level().isClientSide) return;
+        ItemStack actualStack = findMatchingFreezerInInventory(player);
+        if (actualStack != null) {
+            actualStack.setTag(freezerStack.getOrCreateTag().copy());
         }
     }
 
@@ -261,10 +271,7 @@ public class PortableFreezerContainer extends AbstractContainerMenu {
         super.removed(player);
         if (!player.level().isClientSide) {
             saveToNBT();
-            ItemStack actualStack = findMatchingFreezerInInventory(player);
-            if (actualStack != null) {
-                actualStack.setTag(freezerStack.getOrCreateTag().copy());
-            }
+            persistToActualStack();
         }
     }
 

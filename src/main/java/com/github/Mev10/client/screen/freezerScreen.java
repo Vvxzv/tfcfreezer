@@ -26,7 +26,7 @@ public class freezerScreen extends BlockEntityScreen<freezerBlockEntity, freezer
     public void init()
     {
         super.init();
-        addRenderableWidget(new freezerTurnOnButton(blockEntity, getGuiLeft(), getGuiTop(), TOGGLE));
+        addRenderableWidget(new freezerTurnOnButton(menu, getGuiLeft(), getGuiTop(), TOGGLE));
     }
 
     @Override

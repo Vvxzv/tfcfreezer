@@ -9,11 +9,14 @@ import net.dries007.tfc.common.container.CallbackSlot;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 public class freezerContainer extends BlockEntityContainer<freezerBlockEntity> implements  ApplianceButtonHandlerContainer {
+    private int clientTurnedOn;
+    private int clientEnergyScaled;
 
     public static freezerContainer create(freezerBlockEntity freezer, Inventory playerInventory, int windowId) {
         return new freezerContainer(windowId, freezer).init(playerInventory);
@@ -21,6 +24,31 @@ public class freezerContainer extends BlockEntityContainer<freezerBlockEntity> i
 
     protected freezerContainer(int windowId, freezerBlockEntity blockEntity) {
         super(TfcfreezerContainers.freezer_CONTAINER.get(), windowId, blockEntity);
+        clientTurnedOn = blockEntity.isTurnedOn() ? 1 : 0;
+        clientEnergyScaled = calculateEnergyScaled();
+
+        addDataSlot(new DataSlot() {
+            @Override
+            public int get() {
+                return blockEntity.isTurnedOn() ? 1 : 0;
+            }
+
+            @Override
+            public void set(int value) {
+                clientTurnedOn = value;
+            }
+        });
+        addDataSlot(new DataSlot() {
+            @Override
+            public int get() {
+                return calculateEnergyScaled();
+            }
+
+            @Override
+            public void set(int value) {
+                clientEnergyScaled = value;
+            }
+        });
     }
 
     @Override
@@ -58,6 +86,7 @@ public class freezerContainer extends BlockEntityContainer<freezerBlockEntity> i
     @Override
     public void onButtonPress(int var1, @Nullable CompoundTag var2) {
         blockEntity.toggleAppliance();
+        broadcastFullState();
     }
 
     @Override
@@ -67,7 +96,19 @@ public class freezerContainer extends BlockEntityContainer<freezerBlockEntity> i
     }
 
     public int getEnergyStoredScaled() {
-        return (int) (((float)  blockEntity.getEnergy() / (float) blockEntity.getMaxEnergy()) * 64);
+        return isClientSide() ? clientEnergyScaled : calculateEnergyScaled();
+    }
+
+    public boolean isTurnedOn() {
+        return isClientSide() ? clientTurnedOn != 0 : blockEntity.isTurnedOn();
+    }
+
+    private int calculateEnergyScaled() {
+        return (int) (((float) blockEntity.getEnergy() / (float) blockEntity.getMaxEnergy()) * 64);
+    }
+
+    private boolean isClientSide() {
+        return blockEntity.getLevel() != null && blockEntity.getLevel().isClientSide;
     }
 
     @Override

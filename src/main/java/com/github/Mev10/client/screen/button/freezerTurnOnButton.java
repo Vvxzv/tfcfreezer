@@ -1,7 +1,7 @@
 package com.github.Mev10.client.screen.button;
 
 import com.github.Mev10.client.screen.freezerScreen;
-import com.github.Mev10.common.blockentities.freezerBlockEntity;
+import com.github.Mev10.common.container.freezerContainer;
 import com.github.Mev10.network.ApplianceButtonPacket;
 import com.github.Mev10.network.TfcfreezerPacketHandler;
 import net.minecraft.client.gui.GuiGraphics;
@@ -11,9 +11,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraftforge.network.PacketDistributor;
 
 public class freezerTurnOnButton extends Button {
-    private final freezerBlockEntity freezer;
+    private final freezerContainer freezer;
 
-    public freezerTurnOnButton(freezerBlockEntity freezer, int guiLeft, int guiTop, Component tooltip)
+    public freezerTurnOnButton(freezerContainer freezer, int guiLeft, int guiTop, Component tooltip)
     {
         super(guiLeft + 171, guiTop + 17, 20, 20, tooltip, b -> {}, DEFAULT_NARRATION);
         setTooltip(Tooltip.create(tooltip));

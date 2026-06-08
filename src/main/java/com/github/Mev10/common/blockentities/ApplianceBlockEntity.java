@@ -56,6 +56,7 @@ public class ApplianceBlockEntity<C extends IItemHandlerModifiable&INBTSerializa
 
     protected void turnOff(){
         isTurnedOn = false;
+        setActivity(false);
     }
 
     public boolean isTurnedOn(){
@@ -67,7 +68,11 @@ public class ApplianceBlockEntity<C extends IItemHandlerModifiable&INBTSerializa
     }
 
     public void setActivity(boolean isActive){
+        if (this.isActive == isActive) {
+            return;
+        }
         this.isActive = isActive;
+        markForSync();
     }
 
     public int getEnergy(){
@@ -86,6 +91,7 @@ public class ApplianceBlockEntity<C extends IItemHandlerModifiable&INBTSerializa
     public void saveAdditional(CompoundTag nbt)
     {
         nbt.putBoolean("isTurnedOn", isTurnedOn);
+        nbt.putBoolean("isActive", isActive);
         super.saveAdditional(nbt);
     }
 
@@ -99,6 +105,7 @@ public class ApplianceBlockEntity<C extends IItemHandlerModifiable&INBTSerializa
     public void loadAdditional(CompoundTag nbt)
     {
         isTurnedOn = nbt.getBoolean("isTurnedOn");
+        isActive = nbt.getBoolean("isActive");
         super.loadAdditional(nbt);
     }
 }

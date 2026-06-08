@@ -1,22 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "BMR",
-    "LSP",
-    "BCR"
+    "RMR",
+    "RSP",
+    "RCR"
   ],
   "key": {
-    "B": {
-      "item": "tfc:metal/double_sheet/blue_steel"
-    },
     "R": {
-      "item": "tfc:metal/double_sheet/red_steel"
+      "item": "tfc:metal/sheet/red_steel"
     },
     "P": {
       "item": "tfc:steel_pump"
-    },
-    "L": {
-      "item": "tfc:metal/sheet/blue_steel"
     },
     "S": {
       "tag": "forge:chests"
@@ -29,6 +23,6 @@
     }
   },
   "result": {
-    "item": "tfcfreezer:freezer"
+    "item": "tfcfreezer:appliances/portable_freezer"
   }
 }
