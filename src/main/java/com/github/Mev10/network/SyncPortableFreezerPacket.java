@@ -18,11 +18,11 @@ public class SyncPortableFreezerPacket {
     }
 
     public static void encode(SyncPortableFreezerPacket msg, FriendlyByteBuf buf) {
-        buf.writeItem(msg.stack);
+        writeItemStack(msg.stack, buf);
     }
 
     public static SyncPortableFreezerPacket decode(FriendlyByteBuf buf) {
-        return new SyncPortableFreezerPacket(buf.readItem());
+        return new SyncPortableFreezerPacket(readItemStack(buf));
     }
 
     public static void handle(SyncPortableFreezerPacket msg, ServerPlayer player) {
@@ -48,5 +48,29 @@ public class SyncPortableFreezerPacket {
                 screen.refresh();
             }
         }
+    }
+
+    public static void writeItemStack(ItemStack stack, FriendlyByteBuf packetBuffer) {
+        if (stack.isEmpty()) {
+            packetBuffer.writeBoolean(false);
+        } else {
+            packetBuffer.writeBoolean(true);
+            packetBuffer.writeNbt(stack.save(new CompoundTag()));
+            packetBuffer.writeInt(stack.getCount());
+        }
+    }
+
+    public static ItemStack readItemStack(FriendlyByteBuf packetBuffer) {
+        if (!packetBuffer.readBoolean()) {
+            return ItemStack.EMPTY;
+        }
+        CompoundTag tag = packetBuffer.readNbt();
+        if (tag == null) {
+            return ItemStack.EMPTY;
+        }
+        int count = packetBuffer.readInt();
+        ItemStack stack = ItemStack.of(tag);
+        stack.setCount(count);
+        return stack;
     }
 }
